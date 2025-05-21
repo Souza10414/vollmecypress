@@ -1,5 +1,6 @@
 describe('Usuário logado na página de dashboard', () => {
     beforeEach(() => {
+        cy.fixture('especialistas.json').as('especialistas')
         cy.login(Cypress.env('email'), Cypress.env('senha'))
     })
 
@@ -7,6 +8,7 @@ describe('Usuário logado na página de dashboard', () => {
         it('Verifica página de redirecionamento no login com sucesso', () => {
             cy.visit('/dashboard')
             cy.url().should('eq', 'http://localhost:3000/dashboard')
+
         })
 
         it('Com o usuário logado, cadastra um especialista', () => {
@@ -42,8 +44,10 @@ describe('Usuário logado na página de dashboard', () => {
             cy.get('[type="checkbox"]').check(['Sulamerica', 'Unimed', 'Bradesco'])
         })
         it.only('Seleciona o botão checkbox "Atende por plano?" após preenchimento do formulário para visualizar os planos de saúde', () => {
+                  
             cy.get('@especialistas').then((dados) => {
                 const especialista = dados.especialistas[0];
+
                 cy.cadastraEspecialista(
                     especialista.nome,
                     especialista.email,
